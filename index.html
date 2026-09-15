@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tacos Zempoal — $2 tacos on Mission Blvd, Pomona, open till midnight. Named for Cempoala, the ancient Totonac capital of Veracruz.">
+<title>Tacos Zempoal</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    --comal: #17130F;
+    --masa: #F2EAD9;
+    --stone: #B7A98C;
+    --amber: #F2A31D;
+    --achiote: #C13E1D;
+    --jade: #1F7A66;
+    --amber-dim: #7A5310;
+    --jade-dim: #123F35;
+
+    --font-display: 'Bungee', 'Arial Black', sans-serif;
+    --font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Space Mono', 'Courier New', monospace;
+
+    --sp-1: .5rem;
+    --sp-2: 1rem;
+    --sp-3: 1.75rem;
+    --sp-4: 2.75rem;
+    --sp-5: 4.5rem;
+    --sp-6: 7rem;
+
+    --max: 1120px;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--comal);
+    color: var(--masa);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { max-width: 100%; }
+
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  em { color: var(--amber); font-style: normal; }
+  strong { color: var(--masa); font-weight: 700; }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--amber);
+    color: var(--comal);
+    padding: var(--sp-1) var(--sp-2);
+    z-index: 100;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+  .skip-link:focus { left: var(--sp-2); top: var(--sp-1); }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ---------- shared bits ---------- */
+  .eyebrow, .section-en {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: .4em;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: .92rem;
+    letter-spacing: .04em;
+    text-decoration: none;
+    padding: .85em 1.4em;
+    border-radius: 3px;
+    border: 2px solid transparent;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--amber); color: var(--comal); }
+  .btn-primary:hover { background: #ffb838; }
+  .btn-ghost { border-color: var(--jade); color: var(--masa); }
+  .btn-ghost:hover { background: var(--jade-dim); }
+  .btn-lg { font-size: 1.05rem; padding: 1em 1.8em; }
+
+  .tile-divider {
+    height: 16px;
+    background-image:
+      radial-gradient(circle at 5px 5px, var(--jade) 1.6px, transparent 1.7px),
+      radial-gradient(circle at 13px 11px, var(--amber) 1.6px, transparent 1.7px);
+    background-size: 18px 16px;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: .55;
+  }
+
+  /* ---------- badge (signature mark) ---------- */
+  .badge-wrap {
+    --size: clamp(160px, 26vw, 260px);
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 3px solid var(--jade);
+    padding: 9px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .badge-wrap.small { --size: 72px; padding: 5px; border-width: 2px; }
+  .badge-ring {
+    position: absolute;
+    inset: 9px;
+    border-radius: 50%;
+    border: 2px solid var(--amber-dim);
+  }
+  .badge-wrap.small .badge-ring { inset: 5px; border-width: 1.5px; }
+  .badge-spin {
+    position: absolute;
+    inset: 16px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, var(--amber) 0deg 8deg, var(--achiote) 8deg 16deg);
+    animation: spin 36s linear infinite;
+  }
+  .badge-wrap.small .badge-spin { inset: 9px; animation: none; }
+  .badge-wrap.static .badge-spin { animation: none; }
+  .badge-core {
+    position: absolute;
+    inset: 34%;
+    border-radius: 50%;
+    background: var(--comal);
+    border: 2px solid var(--comal);
+  }
+  .badge-core::after {
+    content: '';
+    position: absolute;
+    inset: 38%;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-3);
+    background: rgba(23, 19, 15, .88);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--jade-dim);
+  }
+  .brand { display: flex; align-items: center; gap: .7em; text-decoration: none; min-width: 0; }
+  .brand-word {
+    font-family: var(--font-display);
+    font-size: clamp(.72rem, 3.2vw, 1.05rem);
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+
+  /* ---------- layout ---------- */
+  main { display: block; }
+  section {
+    padding: var(--sp-5) var(--sp-3);
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  /* hero */
+  .hero {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: var(--sp-4);
+    padding-block: var(--sp-4) var(--sp-3);
+    text-align: center;
+  }
+  .hero-copy { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); max-width: 40ch; }
+  .hero h1 {
+    font-size: clamp(3rem, 13vw, 6.5rem);
+    line-height: .92;
+    letter-spacing: -.01em;
+  }
+  .tagline { font-size: clamp(1.15rem, 3.4vw, 1.55rem); color: var(--masa); }
+  .tagline-en { color: var(--stone); font-size: .95rem; }
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid var(--amber-dim);
+    border-radius: 999px;
+    padding: .5em 1em;
+  }
+  .status-chip .dot {
+    width: .5em; height: .5em; border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px 1px var(--amber);
+  }
+  .hero .btn { margin-top: var(--sp-1); }
+
+  /* ticker */
+  .ticker {
+    overflow: hidden;
+    border-block: 1px solid var(--jade-dim);
+    background: #120F0B;
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    gap: 1em;
+    padding-block: .6em;
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .1em;
+    color: var(--stone);
+    animation: ticker 26s linear infinite;
+  }
+  .ticker:hover .ticker-track, .ticker:focus-within .ticker-track { animation-play-state: paused; }
+  .ticker-track span:nth-child(4n) { color: var(--amber); }
+  @keyframes ticker { to { transform: translateX(-50%); } }
+
+  /* story */
+  .story { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .story-num {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 20vw, 8rem);
+    line-height: .8;
+    color: var(--jade);
+  }
+  .story-num::after {
+    content: 'aguas / waters';
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-top: .6em;
+  }
+  .story-copy { display: flex; flex-direction: column; gap: var(--sp-2); max-width: 62ch; }
+  .story-copy h2 { font-size: clamp(1.9rem, 6vw, 2.6rem); }
+  .story-copy p { font-size: 1.05rem; }
+
+  /* menu */
+  .menu h2, .frieze-section h2, .hours h2, .reviews h2, .closing h2 {
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    margin-bottom: .2em;
+  }
+  .menu > .section-en, .frieze-section > .section-en, .hours > .section-en, .reviews > .section-en {
+    margin-bottom: var(--sp-3);
+    display: block;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-3);
+  }
+  .menu-card {
+    border: 1px solid var(--jade-dim);
+    border-radius: 4px;
+    padding: var(--sp-3);
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--achiote);
+  }
+  .menu-card h3 {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--masa);
+    margin-bottom: .3em;
+  }
+  .menu-card .price {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 8vw, 3.6rem);
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: .25em;
+  }
+  .menu-card p:last-child { color: var(--stone); font-size: .95rem; }
+  .menu-note {
+    font-size: .95rem;
+    color: var(--stone);
+    border-top: 1px dashed var(--jade-dim);
+    padding-top: var(--sp-2);
+  }
+  .menu-note span { display: block; margin-top: .3em; color: var(--masa); font-family: var(--font-mono); font-size: .88rem; }
+
+  /* frieze */
+  .frieze-section { text-align: center; }
+  .frieze { width: 100%; height: auto; max-width: 960px; margin: 0 auto var(--sp-2); display: block; }
+  .frieze-section p { max-width: 46ch; margin: 0 auto; color: var(--stone); }
+
+  /* hours */
+  .hours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-3);
+  }
+  .hours-grid .fine { color: var(--stone); font-size: .85rem; margin-top: .4em; }
+  .facts { display: flex; flex-direction: column; gap: .4em; }
+  .facts li { padding-left: 1.3em; position: relative; }
+  .facts li::before {
+    content: '';
+    position: absolute; left: 0; top: .55em;
+    width: .5em; height: .5em;
+    background: var(--jade);
+    border-radius: 1px;
+  }
+
+  /* reviews */
+  .rating {
+    display: flex;
+    align-items: baseline;
+    gap: .6em;
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-3);
+    font-family: var(--font-mono);
+  }
+  .rating-num { font-family: var(--font-display); font-size: 2.4rem; color: var(--amber); }
+  .rating [aria-hidden] { color: var(--amber); letter-spacing: .08em; }
+  .rating-count { color: var(--stone); font-size: .9rem; }
+  .ticket-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-3);
+  }
+  .ticket {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: .92rem;
+    line-height: 1.55;
+    color: var(--masa);
+    background: #120F0B;
+    border-left: 3px solid var(--achiote);
+    padding: var(--sp-2);
+  }
+  .press {
+    border-top: 1px dashed var(--jade-dim);
+    padding-top: var(--sp-2);
+    font-size: .98rem;
+  }
+  .press cite { color: var(--amber); font-style: normal; font-weight: 700; }
+  .press-en { display: block; margin-top: .5em; color: var(--stone); font-size: .88rem; }
+
+  /* closing */
+  .closing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--sp-2);
+  }
+  .closing h2 { font-size: clamp(2rem, 7vw, 3.2rem); margin-block: .2em .4em; }
+
+  /* footer */
+  .site-footer {
+    padding: var(--sp-3);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    color: var(--stone);
+    border-top: 1px solid var(--jade-dim);
+  }
+
+  @media (min-width: 760px) {
+    .hero { flex-direction: row; text-align: left; justify-content: space-between; padding-block: var(--sp-5); }
+    .hero-copy { align-items: flex-start; }
+    section { padding-inline: var(--sp-4); }
+    .story { flex-direction: row; align-items: flex-start; gap: var(--sp-5); }
+    .story-num { flex-shrink: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge-spin, .ticker-track { animation: none; }
+    .btn:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="Tacos Zempoal, back to top">
+    <span class="badge-wrap small static" aria-hidden="true">
+      <span class="badge-ring"></span>
+      <span class="badge-spin"></span>
+      <span class="badge-core"></span>
+    </span>
+    <span class="brand-word">Tacos Zempoal</span>
+  </a>
+  <a class="btn btn-ghost" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Direcciones</a>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Pomona, CA · Mission Blvd</p>
+      <h1>Tacos<br>Zempoal</h1>
+      <p class="tagline" lang="es">Tacos de la esquina. Historia de veinte aguas.</p>
+      <p class="tagline-en">Corner-stand tacos. A name carrying twenty waters of history.</p>
+      <p class="status-chip"><span class="dot"></span> Abierto · cierra a las 12&nbsp;AM</p>
+      <a class="btn btn-primary" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Cómo llegar →</a>
+    </div>
+    <div class="badge-wrap" aria-hidden="true">
+      <span class="badge-ring"></span>
+      <span class="badge-spin"></span>
+      <span class="badge-core"></span>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>$2 TACOS</span><span>·</span><span>CARNE ASADA</span><span>·</span><span>AL PASTOR</span><span>·</span><span>TORTILLAS HECHAS A MANO</span><span>·</span><span>3973 E MISSION BLVD</span><span>·</span><span>ABIERTO HASTA MEDIANOCHE</span><span>·</span>
+      <span>$2 TACOS</span><span>·</span><span>CARNE ASADA</span><span>·</span><span>AL PASTOR</span><span>·</span><span>TORTILLAS HECHAS A MANO</span><span>·</span><span>3973 E MISSION BLVD</span><span>·</span><span>ABIERTO HASTA MEDIANOCHE</span><span>·</span>
+    </div>
+  </div>
+
+  <div class="tile-divider"></div>
+
+  <section class="story" aria-labelledby="story-h">
+    <div class="story-num" aria-hidden="true">20</div>
+    <div class="story-copy">
+      <h2 id="story-h" lang="es">La Historia del Nombre</h2>
+      <p class="section-en">The name</p>
+      <p lang="es">Zempoal viene de Cempoala, la antigua capital totonaca en Veracruz — su nombre náhuatl significa <em>veinte aguas</em>. En 1519, su gobernante se convirtió en el primer aliado indígena de Hernán Cortés.</p>
+      <p>Most people ordering a $2 taco here have never heard the story. It's still in the name — and on the sign.</p>
+    </div>
+  </section>
+
+  <div class="tile-divider"></div>
+
+  <section class="menu" aria-labelledby="menu-h">
+    <h2 id="menu-h" lang="es">El Trompo</h2>
+    <span class="section-en">What's on the grill</span>
+    <div class="menu-grid">
+      <article class="menu-card">
+        <h3>Asada</h3>
+        <p class="price">$2</p>
+        <p lang="es">Carne asada, a la plancha.</p>
+      </article>
+      <article class="menu-card">
+        <h3>Pastor</h3>
+        <p class="price">$2</p>
+        <p lang="es">Del trompo, marinado, piña al gusto.</p>
+      </article>
+    </div>
+    <p class="menu-note">Handmade tortillas, every day.<span lang="es">¿Qué más hay hoy? Pregunta en el mostrador.</span></p>
+  </section>
+
+  <div class="tile-divider"></div>
+
+  <section class="frieze-section" aria-labelledby="frieze-h">
+    <h2 id="frieze-h" lang="es">Veinte Aguas</h2>
+    <span class="section-en">The mark</span>
+    <svg class="frieze" viewBox="0 0 1200 240" role="img" aria-label="Flat silhouette combining Cempoala's stepped Great Pyramid, its circular wind temple, and the row of Las Chimeneas pillars, joined by one ground line">
+      <line x1="40" y1="210" x2="1160" y2="210" stroke="#F2A31D" stroke-width="2" opacity=".5"/>
+      <rect x="60" y="180" width="280" height="30" fill="#1F7A66"/>
+      <rect x="90" y="150" width="220" height="30" fill="#1F7A66"/>
+      <rect x="120" y="120" width="160" height="30" fill="#1F7A66"/>
+      <rect x="150" y="90" width="100" height="30" fill="#1F7A66"/>
+      <rect x="180" y="60" width="40" height="30" fill="#1F7A66"/>
+      <rect x="600" y="204" width="100" height="6" fill="#1F7A66"/>
+      <circle cx="650" cy="150" r="60" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <circle cx="650" cy="80" r="18" fill="#1F7A66"/>
+      <path d="M820 210 A18 18 0 0 1 856 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M864 210 A18 18 0 0 1 900 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M908 210 A18 18 0 0 1 944 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M952 210 A18 18 0 0 1 988 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M996 210 A18 18 0 0 1 1032 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M1040 210 A18 18 0 0 1 1076 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M1084 210 A18 18 0 0 1 1120 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+      <path d="M1128 210 A18 18 0 0 1 1164 210" fill="none" stroke="#1F7A66" stroke-width="6"/>
+    </svg>
+    <p lang="es">La Gran Pirámide, el templo circular del viento, las Chimeneas — tres formas de Cempoala, una silueta.</p>
+  </section>
+
+  <div class="tile-divider"></div>
+
+  <section class="hours" aria-labelledby="hours-h">
+    <h2 id="hours-h" lang="es">Hasta Medianoche</h2>
+    <span class="section-en">Hours &amp; location</span>
+    <div class="hours-grid">
+      <div>
+        <p class="mono-label">Dirección</p>
+        <p>3973 E Mission Blvd<br>Pomona, CA 91766</p>
+      </div>
+      <div>
+        <p class="mono-label">Horario</p>
+        <p>Diario · 4:00&nbsp;PM – 12:00&nbsp;AM</p>
+        <p class="fine">Horario sujeto a cambios — llama para confirmar.</p>
+      </div>
+      <div>
+        <p class="mono-label">Servicio</p>
+        <ul class="facts">
+          <li>Para comer aquí y para llevar</li>
+          <li>Sin entrega a domicilio</li>
+          <li>Entrada accesible en silla de ruedas</li>
+        </ul>
+      </div>
+    </div>
+    <a class="btn btn-primary" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Cómo llegar →</a>
+  </section>
+
+  <div class="tile-divider"></div>
+
+  <section class="reviews" aria-labelledby="reviews-h">
+    <h2 id="reviews-h" lang="es">Lo Que Dice el Barrio</h2>
+    <span class="section-en">What the neighborhood says</span>
+    <p class="rating"><span class="rating-num">4.4</span><span aria-hidden="true">★★★★☆</span><span class="rating-count">33 reseñas en Google</span></p>
+    <div class="ticket-grid">
+      <blockquote class="ticket" lang="es">Trabajadores amables, buena comida, buenos precios.</blockquote>
+      <blockquote class="ticket" lang="es">Vengo por la asada y el pastor — la salsa está buenísima.</blockquote>
+      <blockquote class="ticket" lang="es">Nunca decepciona. Siempre vuelvo.</blockquote>
+    </div>
+    <p class="press">Nombrado uno de los <strong>Nueve Mejores Tacos de Pomona</strong> — <cite>L.A. TACO</cite>
+      <span class="press-en">"This humble taco spot captures the essence of traditional street food." — L.A. TACO</span>
+    </p>
+  </section>
+
+  <div class="tile-divider"></div>
+
+  <section class="closing" aria-labelledby="closing-h">
+    <span class="badge-wrap small static" aria-hidden="true">
+      <span class="badge-ring"></span>
+      <span class="badge-spin"></span>
+      <span class="badge-core"></span>
+    </span>
+    <h2 id="closing-h" lang="es">Nos Vemos a Medianoche.</h2>
+    <a class="btn btn-primary btn-lg" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Cómo llegar →</a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Tacos Zempoal · 3973 E Mission Blvd, Pomona, CA 91766 · Diario 4:00 PM – 12:00 AM</p>
+</footer>
+
+</body>
+</html>
