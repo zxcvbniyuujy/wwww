@@ -187,7 +187,7 @@
     font-family: var(--font-display);
     font-size: clamp(.72rem, 3.2vw, 1.05rem);
     letter-spacing: .01em;
-    white-space: nowrap;
+    min-width: 0;
   }
 
   /* ---------- layout ---------- */
@@ -233,6 +233,8 @@
     background: var(--amber);
     box-shadow: 0 0 8px 1px var(--amber);
   }
+  .status-chip.is-closed { color: var(--stone); border-color: var(--jade-dim); }
+  .status-chip.is-closed .dot { background: var(--stone); box-shadow: none; }
   .hero .btn { margin-top: var(--sp-1); }
 
   /* ticker */
@@ -447,7 +449,7 @@
       <h1>Tacos<br>Zempoal</h1>
       <p class="tagline" lang="es">Tacos de la esquina. Historia de veinte aguas.</p>
       <p class="tagline-en">Corner-stand tacos. A name carrying twenty waters of history.</p>
-      <p class="status-chip"><span class="dot"></span> Abierto · cierra a las 12&nbsp;AM</p>
+      <p class="status-chip" id="status-chip"><span class="dot" aria-hidden="true"></span> <span id="status-text">Diario · 4&nbsp;PM – 12&nbsp;AM</span></p>
       <a class="btn btn-primary" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Cómo llegar →</a>
     </div>
     <div class="badge-wrap" aria-hidden="true">
@@ -469,7 +471,7 @@
   <section class="story" aria-labelledby="story-h">
     <div class="story-num" aria-hidden="true">20</div>
     <div class="story-copy">
-      <h2 id="story-h" lang="es">La Historia del Nombre</h2>
+      <h2 id="story-h" lang="es">La historia del nombre</h2>
       <p class="section-en">The name</p>
       <p lang="es">Zempoal viene de Cempoala, la antigua capital totonaca en Veracruz — su nombre náhuatl significa <em>veinte aguas</em>. En 1519, su gobernante se convirtió en el primer aliado indígena de Hernán Cortés.</p>
       <p>Most people ordering a $2 taco here have never heard the story. It's still in the name — and on the sign.</p>
@@ -479,7 +481,7 @@
   <div class="tile-divider"></div>
 
   <section class="menu" aria-labelledby="menu-h">
-    <h2 id="menu-h" lang="es">El Trompo</h2>
+    <h2 id="menu-h" lang="es">El trompo</h2>
     <span class="section-en">What's on the grill</span>
     <div class="menu-grid">
       <article class="menu-card">
@@ -499,7 +501,7 @@
   <div class="tile-divider"></div>
 
   <section class="frieze-section" aria-labelledby="frieze-h">
-    <h2 id="frieze-h" lang="es">Veinte Aguas</h2>
+    <h2 id="frieze-h" lang="es">Veinte aguas</h2>
     <span class="section-en">The mark</span>
     <svg class="frieze" viewBox="0 0 1200 240" role="img" aria-label="Flat silhouette combining Cempoala's stepped Great Pyramid, its circular wind temple, and the row of Las Chimeneas pillars, joined by one ground line">
       <line x1="40" y1="210" x2="1160" y2="210" stroke="#F2A31D" stroke-width="2" opacity=".5"/>
@@ -526,7 +528,7 @@
   <div class="tile-divider"></div>
 
   <section class="hours" aria-labelledby="hours-h">
-    <h2 id="hours-h" lang="es">Hasta Medianoche</h2>
+    <h2 id="hours-h" lang="es">Hasta medianoche</h2>
     <span class="section-en">Hours &amp; location</span>
     <div class="hours-grid">
       <div>
@@ -553,7 +555,7 @@
   <div class="tile-divider"></div>
 
   <section class="reviews" aria-labelledby="reviews-h">
-    <h2 id="reviews-h" lang="es">Lo Que Dice el Barrio</h2>
+    <h2 id="reviews-h" lang="es">Lo que dice el barrio</h2>
     <span class="section-en">What the neighborhood says</span>
     <p class="rating"><span class="rating-num">4.4</span><span aria-hidden="true">★★★★☆</span><span class="rating-count">33 reseñas en Google</span></p>
     <div class="ticket-grid">
@@ -574,7 +576,7 @@
       <span class="badge-spin"></span>
       <span class="badge-core"></span>
     </span>
-    <h2 id="closing-h" lang="es">Nos Vemos a Medianoche.</h2>
+    <h2 id="closing-h" lang="es">Nos vemos a medianoche.</h2>
     <a class="btn btn-primary btn-lg" href="https://www.google.com/maps/place/Tacos+Zempoal/@34.055693,-117.7945747,13z/data=!4m9!1m2!29m1!3s4094d727-73c9-4e49-881c-b73497896544!3m5!1s0x80c32dd380621473:0x7e5b3f3972d8aff7!8m2!3d34.0556939!4d-117.7183574!16s%2Fg%2F11rhw_xwmq" target="_blank" rel="noopener">Cómo llegar →</a>
   </section>
 
@@ -583,6 +585,24 @@
 <footer class="site-footer">
   <p>Tacos Zempoal · 3973 E Mission Blvd, Pomona, CA 91766 · Diario 4:00 PM – 12:00 AM</p>
 </footer>
+
+<script>
+(function () {
+  var chip = document.getElementById('status-chip');
+  var text = document.getElementById('status-text');
+  if (!chip || !text) return;
+  function update() {
+    var hour = Number(
+      new Intl.DateTimeFormat('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/Los_Angeles' }).format(new Date())
+    );
+    var open = hour >= 16 && hour < 24;
+    chip.classList.toggle('is-closed', !open);
+    text.textContent = open ? 'Abierto ahora · cierra a las 12 AM' : 'Cerrado · abre a las 4 PM';
+  }
+  update();
+  setInterval(update, 60000);
+})();
+</script>
 
 </body>
 </html>
